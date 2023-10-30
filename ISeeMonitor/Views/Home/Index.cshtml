@@ -1,0 +1,149 @@
+﻿@model List<crmmonitor>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<form class="row g-3" asp-action="Index" asp-controller="Home" method="post" asp-antiforgery="true">
+    <div class="row m-2">
+        <div class="col-auto">
+            <label for="customer_name" class="visually-hidden">customer name</label>
+            <input type="text" readonly class="form-control-plaintext float-end text-end" id="customer_name" value="customer name">
+        </div>
+        <div class="col-auto">
+            <label for="inputfname" class="visually-hidden">customer name</label>
+            <input type="text" class="form-control" id="inputfname" name="fname" placeholder="customer name">
+        </div>
+        <div class="col-auto">
+            <label for="Job" class="visually-hidden">Job id</label>
+            <input type="text" readonly class="form-control-plaintext float-end text-end" id="Job" value="Job id">
+        </div>
+        <div class="col-auto">
+            <label for="job_id" class="visually-hidden">Job id</label>
+            <input type="text" class="form-control" id="Job_id" name="job_id" placeholder="Job id">
+        </div>
+        
+    </div>
+    <div class="row m-2">
+        <div class="col-auto">
+            <label for="Owner" class="visually-hidden">Owner</label>
+            <input type="text" readonly class="form-control-plaintext float-end text-end" id="Owner" value="Owner">
+        </div>
+        <div class="col-auto">
+            <select class="form-select" id="owner_id" name="owner_id" aria-label="Default select example">
+                <option value="" selected>ALL</option>
+                @if (ViewData["ownerid"] != null)
+                {
+                    var ownerid = ViewData["ownerid"] as List<owner_id>;
+                    for (int i = 0; i < ownerid.Count; i++)
+                    {
+                        <option value="@ownerid[i].user_id">@(ownerid[i].fullname + " " + ownerid[i].lastname) </option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <label for="SubStatus" class="visually-hidden">SubStatus</label>
+            <input type="text" readonly class="form-control-plaintext float-end text-end" id="SubStatus" value="SubStatus">
+        </div>
+        <div class="col-auto">
+            <select class="form-select" id="job_status_code" name="job_status_code" aria-label="Default select example">
+                <option value="" selected>ALL</option>
+                @if (ViewBag.Substatus != null)
+                {
+                    var substatus = ViewBag.Substatus as List<tbm_substatus>;
+                    for (int i = 0; i < substatus.Count; i++)
+                    {
+                        <option value="@substatus[i].STATUS_CODE">@substatus[i].STATUS_DESCRIPTION</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="row m-2">     
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary m-3">Search</button>
+            <button type="submit" class="btn btn-danger m-3">clear</button>
+        </div>
+    </div>   
+</form>
+<table id="renderdata" class="table">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">customer_id </th>
+            <th scope="col">fname </th>
+            <th scope="col">email </th>
+            <th scope="col">phone_no </th>
+            <th scope="col">owner </th>
+            <th scope="col">tranfer_to </th>
+            <th scope="col">location_name </th>
+            <th scope="col">job_id </th>
+            <th scope="col">jobdescription </th>
+            <th scope="col">job_status_desc </th>
+            <th scope="col">job sub status </th>
+            <th scope="col">job Remark </th>
+            <th scope="col">status dt </th>
+            <th scope="col">status by </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            for (int i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <th scope="row">@(i+1)</th>
+                    <td>@Model[i].customer_id </td>
+                    <td>@Model[i].fname </td>
+                    <td>@Model[i].email </td>
+                    <td>@Model[i].phone_no </td>
+                    <td>@Model[i].owner </td>
+                    <td>@Model[i].tranfer_to </td>
+                    <td>@Model[i].location_name </td>
+                    <td>@Model[i].job_id </td>
+                    <td>@Model[i].jobdescription </td>
+                    @if (Model[i].job_status_code == "C")
+                    {
+                        <td class="table-success">@Model[i].job_status_desc</td>
+                    }else
+                    {
+                        <td class="table-warning">@Model[i].job_status_desc</td>
+                    }
+                    @if (Model[i].job_substatus is null)
+                    {
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    }else
+                    {
+                        var noti = @Model[i].job_substatus[0].STATUS_CODE == "END" ? "success" : "warning";
+                        <td class="table-@noti">@Model[i].job_substatus[0].STATUS_DESCRIPTION</td>
+                        <td class="table-@noti">@Model[i].job_substatus[0].STATUS_REMARK</td>
+                        <td class="table-@noti">@Model[i].job_substatus[0].STATUS_DT</td>
+                        <td class="table-@noti">@Model[i].job_substatus[0].CREATE_BY</td>
+                    }
+                </tr>
+            }          
+        }
+    </tbody>
+</table>
+@section Scripts {
+
+    <script defer >
+    const init =()=>{
+            new DataTable('#renderdata');
+            $("#owner_id").select2({
+                theme: "bootstrap-5",
+            });
+            $("#job_status_code").select2({
+                theme: "bootstrap-5",
+            });
+        }
+        $(document).ready(function () {
+            init();
+        });
+
+    </script>
+
+}
