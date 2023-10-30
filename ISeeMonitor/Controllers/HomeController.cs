@@ -57,7 +57,11 @@ namespace ISeeMonitor.Controllers
             ViewBag.Substatus = HttpContext.Session.GetString("substatus")==null?null: JsonSerializer.Deserialize<List<tbm_substatus>>(HttpContext.Session.GetString("substatus"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return View(response.Data);
+                return View(response?.Data);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+            {
+                return View();
             }
             else
             {
