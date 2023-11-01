@@ -70,20 +70,24 @@
     <thead class="table-dark">
         <tr>
             <th scope="col">#</th>
-            <th scope="col">customer_id </th>
-            <th scope="col">fname </th>
+            <th scope="col">Name</th>
+            <th scope="col">Website </th>
+            <th scope="col">Contract </th>
+            <th scope="col">Position </th>
             <th scope="col">email </th>
-            <th scope="col">phone_no </th>
-            <th scope="col">owner </th>
-            <th scope="col">tranfer_to </th>
-            <th scope="col">location_name </th>
-            <th scope="col">job_id </th>
-            <th scope="col">jobdescription </th>
-            <th scope="col">job_status_desc </th>
-            <th scope="col">job sub status </th>
-            <th scope="col">job Remark </th>
-            <th scope="col">status dt </th>
-            <th scope="col">status by </th>
+            <th scope="col">Mobile </th>
+            <th scope="col">Owner </th>
+            <th scope="col">Model Types </th>
+            <th scope="col">Location </th>
+            <th scope="col">People </th>
+            <th scope="col">Status </th>
+            <th scope="col">Priority </th>
+            <th scope="col">Deal creation date </th>
+            <th scope="col">Due date follow up </th>
+            <th scope="col">Deal value </th>
+            <th scope="col">% </th>
+            <th scope="col">Won</th>
+            <th scope="col">Last Updated</th>
         </tr>
     </thead>
     <tbody>
@@ -93,35 +97,37 @@
             {
                 <tr>
                     <th scope="row">@(i+1)</th>
-                    <td>@Model[i].customer_id </td>
                     <td>@Model[i].fname </td>
+                    <td>@Model[i].website </td>
+                    <td>@Model[i].contract </td>
+                    <td>@Model[i].position </td>
                     <td>@Model[i].email </td>
                     <td>@Model[i].phone_no </td>
                     <td>@Model[i].owner </td>
-                    <td>@Model[i].tranfer_to </td>
+                    <td>@Model[i].Model_type </td>
                     <td>@Model[i].location_name </td>
-                    <td>@Model[i].job_id </td>
-                    <td>@Model[i].jobdescription </td>
+                    <td>@Model[i].People </td>
                     @if (Model[i].job_status_code == "C")
                     {
                         <td class="table-success">@Model[i].job_status_desc</td>
-                    }else
+                    }
+                    else
                     {
                         <td class="table-warning">@Model[i].job_status_desc</td>
                     }
+                    <td>@Model[i].Priority</td>
+                    <td>@Model[i].Deal_creation_date </td>
+                    <td>@Model[i].Due_date_follow_up </td>
+                    <td>@Model[i].Deal_value </td>
+                    <td>@Model[i].Percen </td>
+                    <td>-</td>                  
                     @if (Model[i].job_substatus is null)
-                    {
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
+                    {                      
                         <td>-</td>
                     }else
                     {
                         var noti = @Model[i].job_substatus[0].STATUS_CODE == "END" ? "success" : "warning";
-                        <td class="table-@noti">@Model[i].job_substatus[0].STATUS_DESCRIPTION</td>
-                        <td class="table-@noti">@Model[i].job_substatus[0].STATUS_REMARK</td>
-                        <td class="table-@noti">@Model[i].job_substatus[0].STATUS_DT</td>
-                        <td class="table-@noti">@Model[i].job_substatus[0].CREATE_BY</td>
+                        <td class="table-@noti">@string.Format("{0} {1}",Model[i].job_substatus[0].CREATE_BY,Model[i].job_substatus[0].STATUS_DT)</td>
                     }
                 </tr>
             }
