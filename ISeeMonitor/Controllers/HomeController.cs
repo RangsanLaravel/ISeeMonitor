@@ -129,8 +129,8 @@ namespace ISeeMonitor.Controllers
         [HttpPost]
         public IActionResult UpdateStatus(update_status data)
         {
-            RestClient client = new RestClient(_configuration["API:ISEECENTER"]);
-            RestRequest request = new RestRequest($"api/Monitors/UpdateStatus", Method.Post);
+            RestClient client = new RestClient(_configuration["API:ISEESERVICE"]);
+            RestRequest request = new RestRequest($"api/v2/ISEEStatus/UpdateStatus", Method.Post);
             request.AddHeader("Authorization", "Bearer " + HttpContext.Session.GetString("token"));
             request.AddJsonBody(data);
             var response = client.Execute(request);
