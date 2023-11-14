@@ -2,6 +2,80 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<!-- Button trigger modal -->
+<button type="button" id="showedit" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" hidden>
+    Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">ปรับสถานะงาน</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input id="jobid" hidden/>
+                    <div class="col-6">
+                        <label for="ownerid" class="form-label">Assign To </label>
+                        <select id="ownerid" class="form-select" aria-label="Default select example">
+                          @*   <option selected>Open this select menu</option>
+                            <option value="1">One</option> *@
+                            @if (ViewData["ownerid"] != null)
+                            {
+                                var ownerid = ViewData["ownerid"] as List<owner_id>;
+                                for (int i = 0; i < ownerid.Count; i++)
+                                {
+                                    if (i == 0)
+                                    {
+                                       <option value="@ownerid[i].user_id" selected>@(ownerid[i].fullname + " " + ownerid[i].lastname) </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@ownerid[i].user_id">@(ownerid[i].fullname + " " + ownerid[i].lastname) </option>
+                                    }
+                                }
+                            }
+
+                        </select>
+                    </div>
+                     <div class="col-6">
+                        <label for="jobstatus" class="form-label">Status Job</label>
+                        <select id="jobstatus" class="form-select" aria-label="Default select example">
+                            @if(ViewData["substatus"] != null)
+                            {
+                                var substatus = ViewData["substatus"] as List<tbm_substatus>;
+                                for (int i = 0; i < substatus.Count; i++)
+                                {
+                                    if (i == 0)
+                                    {
+                                        <option value="@substatus[i].id" selected>@(substatus[i].STATUS_DESCRIPTION) </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@substatus[i].id">@(substatus[i].STATUS_DESCRIPTION) </option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="remark" class="form-label">Remark</label>
+                        <textarea class="form-control" id="remark" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="updatestatus()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
 <form class="row g-3" asp-action="Index" asp-controller="Home" method="post" asp-antiforgery="true">
     <div class="row m-2">
         <div class="col-auto">
@@ -95,8 +169,8 @@
         {
             for (int i = 0; i < Model.Count; i++)
             {
-                <tr>
-                    <th scope="row">@(i+1)</th>
+                <tr ondblclick="showedit('@Model[i].job_id')">
+                    <th scope="row">@(i + 1)</th>
                     <td>@Model[i].fname </td>
                     <td>@Model[i].website </td>
                     <td>@Model[i].contract </td>
@@ -113,7 +187,7 @@
                     }
                     else
                     {
-                        <td class="table-warning">@Model[i].job_status_desc</td>
+                        <td  class="table-warning">@Model[i].job_status_desc</td>
                     }
                     <td>@Model[i].Priority</td>
                     <td>@Model[i].Deal_creation_date </td>
@@ -123,7 +197,7 @@
                     <td>-</td>                  
                     @if (Model[i].job_substatus is null)
                     {                      
-                        <td>-</td>
+                        <td ondblclick="showedit(@Model[i].job_id)">-</td>
                     }else
                     {
                         var noti = @Model[i].job_substatus[0].STATUS_CODE == "END" ? "success" : "warning";
@@ -153,7 +227,39 @@
         $(document).ready(function () {
             init();
         });
+    const showedit =(jobid)=>{
+            $('#jobid').val(jobid)
+            $('#showedit').click()
+    }
+    const updatestatus =()=>{
+            $.ajax({
+                url: '@Url.Action("UpdateStatus", "Home")',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    jobid: $('#jobid').val(),
+                    userid: $('#ownerid').val(),
+                    statusid: $('#jobstatus').val(),
+                    remark: $('#remark').val()
+                },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire("Saved!", "", "success");
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: response.error
+                        });
+                    }
+                   
+                },
+                error: function () {
 
+                }
+            });
+           
+    }
     </script>
 
 }

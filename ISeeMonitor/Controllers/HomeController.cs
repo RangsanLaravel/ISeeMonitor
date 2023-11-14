@@ -54,6 +54,7 @@ namespace ISeeMonitor.Controllers
             var response = client.Execute<List<crmmonitor>>(request);
             ViewBag.Fullname =  HttpContext.Session.GetString("fullname");
             ViewData["ownerid"] = GET_OWNERID();
+            ViewData["substatus"]= GET_TBM_SUBSTATUS();
             ViewBag.Substatus = HttpContext.Session.GetString("substatus")==null?null: JsonSerializer.Deserialize<List<tbm_substatus>>(HttpContext.Session.GetString("substatus"));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -105,7 +106,7 @@ namespace ISeeMonitor.Controllers
             }
             return null;
         }
-        protected void GET_TBM_SUBSTATUS()
+        protected List<tbm_substatus> GET_TBM_SUBSTATUS()
         {
                 var client = new RestClient(_configuration["API:ISEESERVICE"]);
                 var request = new RestRequest("api/v1/ISEEServices/TBM_SUBSTATUS", Method.Get);
@@ -113,10 +114,10 @@ namespace ISeeMonitor.Controllers
                 var response = client.Execute<List<tbm_substatus>>(request);
                 if (response.StatusCode== HttpStatusCode.OK)
                 {
-                HttpContext.Session.SetString("substatus", JsonSerializer.Serialize(response.Data));
-            }         
+                    HttpContext.Session.SetString("substatus", JsonSerializer.Serialize(response.Data));               
+                }
+            return response?.Data;
         }
-
 
         public IActionResult Logout()
         {
@@ -124,6 +125,20 @@ namespace ISeeMonitor.Controllers
             HttpContext.Session.Remove("fullname");
             HttpContext.Session.Remove("token");
             return Redirect(_configuration["Link:Login"]);
+        }
+        [HttpPost]
+        public IActionResult UpdateStatus(update_status data)
+        {
+            RestClient client = new RestClient(_configuration["API:ISEECENTER"]);
+            RestRequest request = new RestRequest($"api/Monitors/UpdateStatus", Method.Post);
+            request.AddHeader("Authorization", "Bearer " + HttpContext.Session.GetString("token"));
+            request.AddJsonBody(data);
+            var response = client.Execute(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Json(new { success = true }) ;
+            }
+            return Json(new { success = true,error=response.Content }) ;
         }
         public IActionResult Privacy()
         {
