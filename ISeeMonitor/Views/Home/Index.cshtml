@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="closemodal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="updatestatus()">Save</button>
             </div>
         </div>
@@ -135,7 +135,7 @@
 
     <div class="row m-2">     
         <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary m-3">Search</button>
+            <button id="search" type="submit" class="btn btn-primary m-3">Search</button>
             <button type="submit" class="btn btn-danger m-3">clear</button>
         </div>
     </div>   
@@ -244,7 +244,14 @@
                 },
                 success: function (response) {
                     if (response.success) {
+
                         Swal.fire("Saved!", "", "success");
+                        
+                        setTimeout(function () {
+                            //your code to be executed after 1 second
+                            $('#closemodal').click()
+                            $('#search').click()
+                        }, 3000);
                     } else {
                         Swal.fire({
                             icon: "error",
