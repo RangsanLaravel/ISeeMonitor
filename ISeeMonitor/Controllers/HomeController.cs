@@ -21,8 +21,9 @@ namespace ISeeMonitor.Controllers
         }
 
         public IActionResult Index(searchalljob searchalljob)
-        { 
-            
+        {
+            if (HttpContext.Session.GetString("token") is null)
+                return RedirectToAction("Logout");
             RestClient client = new RestClient(_configuration["API:ISEECENTER"]);
             RestRequest request = new RestRequest($"api/Monitors/GET_DETAIL_ALLJOB", Method.Post);
             request.AddHeader("Authorization", "Bearer " + HttpContext.Session.GetString("token"));
