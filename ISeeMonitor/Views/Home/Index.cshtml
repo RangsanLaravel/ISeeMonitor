@@ -12,7 +12,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">ปรับสถานะงาน</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">ปรับสถานะงาน </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -30,7 +30,7 @@
                                 {
                                     if (i == 0)
                                     {
-                                       <option value="@ownerid[i].user_id" selected>@(ownerid[i].fullname + " " + ownerid[i].lastname) </option>
+                                       <option value="" selected>- ไม่แก้ไข -</option>
                                     }
                                     else
                                     {
@@ -229,6 +229,7 @@
         });
     const showedit =(jobid)=>{
             $('#jobid').val(jobid)
+            $('#staticBackdropLabel').text(`ปรับสถานะงาน ${jobid}`)
             $('#showedit').click()
     }
     const updatestatus =()=>{
@@ -243,8 +244,10 @@
                     remark: $('#remark').val()
                 },
                 success: function (response) {
+                    debugger
+                    console.log(response)
                     if (response.success) {
-
+                       
                         Swal.fire("Saved!", "", "success");
                         
                         setTimeout(function () {

@@ -129,6 +129,8 @@ namespace ISeeMonitor.Controllers
         [HttpPost]
         public IActionResult UpdateStatus(update_status data)
         {
+            if (HttpContext.Session.GetString("token") is null)
+                return RedirectToAction("Logout");
             RestClient client = new RestClient(_configuration["API:ISEESERVICE"]);
             RestRequest request = new RestRequest($"api/v2/ISEEStatus/UpdateStatus", Method.Post);
             request.AddHeader("Authorization", "Bearer " + HttpContext.Session.GetString("token"));
@@ -138,7 +140,7 @@ namespace ISeeMonitor.Controllers
             {
                 return Json(new { success = true }) ;
             }
-            return Json(new { success = true,error=response.Content }) ;
+            return Json(new { success = false,error=response.Content }) ;
         }
         public IActionResult Privacy()
         {
