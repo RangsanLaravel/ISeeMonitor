@@ -6,5 +6,6 @@
         public string user_name { get; set; }
         public string fullname { get; set; }
         public string lastname { get; set; }
+        public string email { get; set; }
     }
 }

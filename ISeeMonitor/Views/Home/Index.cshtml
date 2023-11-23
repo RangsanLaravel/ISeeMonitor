@@ -7,6 +7,11 @@
     Launch static backdrop modal
 </button>
 
+<!-- Button trigger modal -->
+<button type="button" id="showtimeline" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#timeline" hidden>
+    Launch static backdrop modal
+</button>
+
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -21,8 +26,6 @@
                     <div class="col-6">
                         <label for="ownerid" class="form-label">Assign To </label>
                         <select id="ownerid" class="form-select" aria-label="Default select example">
-                          @*   <option selected>Open this select menu</option>
-                            <option value="1">One</option> *@
                             @if (ViewData["ownerid"] != null)
                             {
                                 var ownerid = ViewData["ownerid"] as List<owner_id>;
@@ -72,6 +75,21 @@
             <div class="modal-footer">
                 <button id="closemodal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" onclick="updatestatus()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal timeline-->
+<div class="modal fade" id="timeline" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">แสดงสถานะงานย่อย </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="renderiframe" class="modal-body">
+                
             </div>
         </div>
     </div>
@@ -143,7 +161,8 @@
 <table id="renderdata" class="table">
     <thead class="table-dark">
         <tr>
-            <th scope="col">#</th>
+            <th >#</th>
+            <th scope="col">Order</th>
             <th scope="col">Name</th>
             <th scope="col">Website </th>
             <th scope="col">Contract </th>
@@ -169,39 +188,40 @@
         {
             for (int i = 0; i < Model.Count; i++)
             {
-                <tr ondblclick="showedit('@Model[i].job_id')">
-                    <th scope="row">@(i + 1)</th>
-                    <td>@Model[i].fname </td>
-                    <td>@Model[i].website </td>
-                    <td>@Model[i].contract </td>
-                    <td>@Model[i].position </td>
-                    <td>@Model[i].email </td>
-                    <td>@Model[i].phone_no </td>
-                    <td>@Model[i].owner </td>
-                    <td>@Model[i].Model_type </td>
-                    <td>@Model[i].location_name </td>
-                    <td>@Model[i].People </td>
+                <tr >
+                    <th><a href="#" onclick="showtimeline('@Model[i].job_id')"><i class="bi bi-plus-square-fill" style="font-size:15px"></i></a></th>
+                    <th ondblclick="showedit('@Model[i].job_id')" scope="row">@(i + 1)</th>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].fname </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].website </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].contract </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].position </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].email </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].phone_no </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].owner </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].Model_type </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].location_name </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].People </td>
                     @if (Model[i].job_status_code == "C")
                     {
-                        <td class="table-success">@Model[i].job_status_desc</td>
+                        <td ondblclick="showedit('@Model[i].job_id')" class="table-success">@Model[i].job_status_desc</td>
                     }
                     else
                     {
-                        <td  class="table-warning">@Model[i].job_status_desc</td>
+                        <td  ondblclick="showedit('@Model[i].job_id')" class="table-warning">@Model[i].job_status_desc</td>
                     }
-                    <td>@Model[i].Priority</td>
-                    <td>@Model[i].Deal_creation_date </td>
-                    <td>@Model[i].Due_date_follow_up </td>
-                    <td>@Model[i].Deal_value </td>
-                    <td>@Model[i].Percen </td>
-                    <td>-</td>                  
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].Priority</td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].Deal_creation_date </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].Due_date_follow_up </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].Deal_value </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">@Model[i].Percen </td>
+                    <td ondblclick="showedit('@Model[i].job_id')">-</td>                  
                     @if (Model[i].job_substatus is null)
                     {                      
                         <td ondblclick="showedit(@Model[i].job_id)">-</td>
                     }else
                     {
-                        var noti = @Model[i].job_substatus[0].STATUS_CODE == "END" ? "success" : "warning";
-                        <td class="table-@noti">@string.Format("{0} {1}",Model[i].job_substatus[0].CREATE_BY,Model[i].job_substatus[0].STATUS_DT)</td>
+                        var noti =@Model[i].job_substatus[0].STATUS_CODE == "END" ? "success" : "warning";
+                        <td ondblclick="showedit('@Model[i].job_id')" class="table-@noti">@string.Format("{0} {1}",Model[i].job_substatus[0].CREATE_BY,Model[i].job_substatus[0].STATUS_DT)</td>
                     }
                 </tr>
             }
@@ -215,8 +235,11 @@
 @section Scripts {
 
     <script defer >
+      
     const init =()=>{
-            new DataTable('#renderdata');
+         new DataTable('#renderdata');
+           
+
             $("#owner_id").select2({
                 theme: "bootstrap-5",
             });
@@ -232,6 +255,14 @@
             $('#staticBackdropLabel').text(`ปรับสถานะงาน ${jobid}`)
             $('#showedit').click()
     }
+
+        const showtimeline = (jobid) => {
+            $('#jobid').val(jobid)
+            $('#renderiframe').html('')
+            let ifr = `<iframe  src="http://203.151.136.81/timelinejob?jobid=PM23110057" width="800px" frameborder="0" id='inneriframe' scrolling=no></iframe>`
+            $('#renderiframe').append(ifr)
+            $('#showtimeline').click()
+        }
     const updatestatus =()=>{
             $.ajax({
                 url: '@Url.Action("UpdateStatus", "Home")',
