@@ -97,13 +97,16 @@ namespace ISeeMonitor.Controllers
         [HttpGet]
         public IActionResult GET_TIMELINE(string jobid)
         {
-            var client = new RestClient();
-            var request = new RestRequest($"{_configuration["LinkAPI:ISeeServices"]}api/v2/ISEEStatus/get_substatus/{jobid}", Method.Get);
+            RestClient client = new RestClient(_configuration["API:ISEESERVICE"]);
+            var request = new RestRequest($"api/v2/ISEEStatus/get_substatus/{jobid}", Method.Get);
             request.AddHeader("Authorization", "Bearer " + HttpContext.Session.GetString("token"));
             var response = client.Execute<List<tbt_job_substatus>>(request);
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 return Json( new { success = true, data = response.Data });
+            }else if (response.StatusCode ==System.Net.HttpStatusCode.NoContent)
+            {
+                return Json(new { success = true, data="" });
             }
                 return Json( new { success = false, error = response.Content});
 

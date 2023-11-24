@@ -88,8 +88,14 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">แสดงสถานะงานย่อย </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div id="renderiframe" class="modal-body">
-                
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div id="renderiframe" class="timeline-steps aos-init aos-animate" data-aos="fade-up">
+                                                     
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -258,7 +264,7 @@
 
         const showtimeline = (jobid) => {
             $('#jobid').val(jobid)
-            $('#renderiframe').html('')
+            // $('#renderiframe').html('')
            
             $.ajax({
                 url: `@Url.Action("GET_TIMELINE","Home")?jobid=${jobid}`,
@@ -266,9 +272,16 @@
                 dataType: 'json',
                 success: function (response) {
                     console.log(response)
+                    let render = ` <div class="timeline-step">
+                                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
+                                            <div class="inner-circle"></div>
+                                            <p class="h6 mt-3 mb-1">2003</p>
+                                            <p class="h6 text-muted mb-0 mb-lg-0">Favland Founded</p>
+                                        </div>
+                                    </div>  `
                     // if (response.success) {
-                    //     $('#renderiframe').append(ifr)
-                    //     $('#showtimeline').click()
+                        // $('#renderiframe').append(ifr)
+                        $('#showtimeline').click()
                     // } else {
                     //     Swal.fire({
                     //         icon: "error",
