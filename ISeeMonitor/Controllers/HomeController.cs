@@ -94,6 +94,20 @@ namespace ISeeMonitor.Controllers
                 HttpContext.Session.SetString("fullname",response.Data.fullname);
             }
         }
+        [HttpGet]
+        public IActionResult GET_TIMELINE(string jobid)
+        {
+            var client = new RestClient();
+            var request = new RestRequest($"{_configuration["LinkAPI:ISeeServices"]}api/v2/ISEEStatus/get_substatus/{jobid}", Method.Get);
+            request.AddHeader("Authorization", "Bearer " + HttpContext.Session.GetString("token"));
+            var response = client.Execute<List<tbt_job_substatus>>(request);
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Json( new { success = true, data = response.Data });
+            }
+                return Json( new { success = false, error = response.Content});
+
+        }
 
         protected List<owner_id> GET_OWNERID()
         {

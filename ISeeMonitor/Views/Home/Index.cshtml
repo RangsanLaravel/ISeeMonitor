@@ -259,9 +259,30 @@
         const showtimeline = (jobid) => {
             $('#jobid').val(jobid)
             $('#renderiframe').html('')
-            let ifr = `<iframe  src="http://203.151.136.81/timelinejob?jobid=PM23110057" width="800px" frameborder="0" id='inneriframe' scrolling=no></iframe>`
-            $('#renderiframe').append(ifr)
-            $('#showtimeline').click()
+           
+            $.ajax({
+                url: `@Url.Action("GET_TIMELINE","Home")?jobid=${jobid}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response)
+                    // if (response.success) {
+                    //     $('#renderiframe').append(ifr)
+                    //     $('#showtimeline').click()
+                    // } else {
+                    //     Swal.fire({
+                    //         icon: "error",
+                    //         title: "Oops...",
+                    //         text: response.error
+                    //     });
+                    // }
+
+                },
+                error: function () {
+
+                }
+            });
+     
         }
     const updatestatus =()=>{
             $.ajax({
