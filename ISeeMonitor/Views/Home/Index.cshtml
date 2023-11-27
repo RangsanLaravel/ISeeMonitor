@@ -280,17 +280,24 @@
                                                 <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
                                                     <div class="inner-circle"></div>
                                                         <p class="h6 mt-3 mb-1">${response.data[i].substatus??''}</p>
-                                                        <p class="h6 text-muted mb-0 mb-lg-0">${response.data[i].create_id??''}</p>                                                                                                                             <p class="h6 text-muted mb-0 mb-lg-0">${response.data[0].create_id}</p>
+                                                        <p class="h6 text-muted mb-0 mb-lg-0">${response.data[i].create_id??''}</p>                                                      
                                                         <p class="h6 text-muted mb-0 mb-lg-0">${response.data[i].status_dt??''}</p>
                                                         <p class="h6 text-muted mb-0 mb-lg-0">${response.data[i].status_remark??''}</p>
                                                 </div>
-                                            </div>`
+                                                    </div><i class="fa-solid fa-arrow-right"></i>`
                             }
                             $('#renderiframe').append(render)
+                            $('#showtimeline').click()
+                            
 
+                        }else{
+                            Swal.fire({
+                                icon: "waring",
+                                title: "Oops...",
+                                text: 'ไม่พบข้อมูล'
+                            });
                         }
-                        $('#showtimeline').click()
-                    
+                                           
                     } else {
                         Swal.fire({
                             icon: "error",

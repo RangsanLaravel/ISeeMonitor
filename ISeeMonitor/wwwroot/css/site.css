@@ -46,17 +46,21 @@ body {
         width: 3.46rem;
         position: absolute;
         left: 7.5rem;
-        top: .3125rem
+        /*top: .3125rem ;*/
+        top: 10.1px;
     }
 
     .timeline-steps .timeline-step:not(:first-child):before {
-        content: "";
+        content: ">";
         display: block;
-        border-top: .25rem dotted #3b82f6;
+        font-weight: bold;
+        /*border-top: .25rem dotted #3b82f6;*/
+        color: #3b82f6;
         width: 3.8125rem;
         position: absolute;
-        right: 7.5rem;
-        top: .3125rem
+        right: 85px;
+        /*top: .3125rem*/
+        top: 1px;
     }
 }
 
